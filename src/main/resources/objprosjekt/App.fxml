@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prosjekt.JourneyPlanController">
+   <children>
+      <ImageView fitHeight="206.0" fitWidth="308.0" layoutX="155.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@world.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="txtCities" layoutX="39.0" layoutY="235.0" />
+      <TextField fx:id="txtIndex" layoutX="383.0" layoutY="235.0" />
+      <Button fx:id="btnAdd" layoutX="212.0" layoutY="233.0" mnemonicParsing="false" onAction="#addCity" text="legg til by" />
+      <Button fx:id="btnRemove" layoutX="312.0" layoutY="233.0" mnemonicParsing="false" onAction="#removeCity" text="fjern by" />
+      <Label id="txtJourney" layoutX="143.0" layoutY="278.0" prefHeight="82.0" prefWidth="290.0" />
+   </children>
+</AnchorPane>
