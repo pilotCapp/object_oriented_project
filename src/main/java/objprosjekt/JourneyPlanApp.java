@@ -1,4 +1,4 @@
-package prosjekt;
+package objprosjekt;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,4 +20,3 @@ public class JourneyPlanApp extends Application {
         primaryStage.show();
     }
 }
-
