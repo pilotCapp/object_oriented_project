@@ -1,21 +1,58 @@
 package objprosjekt;
 
 import java.util.List;
+import java.util.Scanner;
+
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Ellipse;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class JourneyPlan {
     private List<Journey> journeyList = new ArrayList<>();
+    private JourneyFileHandler filHåndterer = new JourneyFileHandler();
+    private Journey currentJourney;
 
     public JourneyPlan() {
-        this.journeyList.add(new Journey());
+        filHåndterer.getTextFromFile(this);
+        if (this.getSize() == 0) {
+            addJourney();
+        }
+        currentJourney = journeyList.get(0);
     }
 
-    public void addJourney(Journey a) {
-        this.journeyList.add(a);
+    public void addJourney(Journey reise) {
+        journeyList.add(reise);
+        currentJourney = this.getJourney(this.getSize() - 1);// -1
     }
 
-    public void removeJourney(Journey a) {
-        this.journeyList.remove(a);
+    public void addJourney() {
+        journeyList.add(new Journey());
+        currentJourney = this.getJourney(this.getSize() - 1);// -1
+    }
+
+    public void removeJourney() {
+        if (this.getSize() > 1) {
+            int a = this.getIndex(currentJourney);
+            this.journeyList.remove(a);
+            currentJourney = this.getJourney(a);
+        } else {
+            currentJourney.clear();
+        }
+    }
+
+    public void pinPressed(String ID, Hashtable<String, Ellipse> knapper) {
+        if (currentJourney.isIn(ID)) {
+            currentJourney.removeCity(ID);
+            currentJourney.toEllipse(ID, knapper).setFill(Color.RED);
+        } else {
+            currentJourney.addCity(ID);
+            currentJourney.toEllipse(ID, knapper).setFill(Color.GREEN);
+        }
     }
 
     public int getIndex(Journey a) {
@@ -45,4 +82,23 @@ public class JourneyPlan {
 
     }
 
+    public void save() {
+        filHåndterer.setTextToFile(journeyList);
+    }
+
+    public Journey getCurrentJourney() {
+        return (this.currentJourney);
+    }
+
+    public void next() {
+        if (this.getSize() > this.getIndex(currentJourney) + 1) {// -1
+            currentJourney = this.getJourney(this.getIndex(currentJourney) + 1);// -1
+        }
+    }
+
+    public void last() {
+        if (this.getIndex(currentJourney) >= 1) {
+            currentJourney = this.getJourney(this.getIndex(currentJourney) - 1);
+        }
+    }
 }
