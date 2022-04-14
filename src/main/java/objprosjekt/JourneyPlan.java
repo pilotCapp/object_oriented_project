@@ -1,23 +1,30 @@
 package objprosjekt;
 
 import java.util.List;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class JourneyPlan {
-    private List<Journey> journeyList = new ArrayList<>();
-    private JourneyFileHandler filHåndterer = new JourneyFileHandler();
-    private Journey currentJourney;
+    private List<Journey> unSortedJourneyList = new ArrayList<>();
+    private List<Journey> journeyList;
+    private List<Journey> sortedJourneyList;
 
-    public JourneyPlan() {
+    private JourneyFileHandler filHåndterer;
+    private Journey currentJourney;
+    private Hashtable<String, Ellipse> destinations;
+    private JourneyComparator sorter;
+    private boolean sorted;
+
+    public JourneyPlan(Hashtable<String, Ellipse> allDestinations) {
+        destinations = allDestinations;
+        sorted = false;
+        filHåndterer = new JourneyFileHandler(allDestinations);
+        sorter = new JourneyComparator(destinations);
+        journeyList = unSortedJourneyList;
         filHåndterer.getTextFromFile(this);
         if (this.getSize() == 0) {
             addJourney();
@@ -25,20 +32,37 @@ public class JourneyPlan {
         currentJourney = journeyList.get(0);
     }
 
+    public void setSorted(boolean isSorted) {
+        sorted = isSorted;
+    }
+
+    public boolean getSorted() {
+        return (this.sorted);
+    }
+
     public void addJourney(Journey reise) {
-        journeyList.add(reise);
-        currentJourney = this.getJourney(this.getSize() - 1);// -1
+        if (reise.getAllDestinations().equals(this.destinations)) {
+            unSortedJourneyList.add(reise);
+            this.sort(sorted);
+            currentJourney = this.getJourney(this.getSize() - 1);// -1
+        } else {
+            throw new IllegalArgumentException("reisen har ikke-eksisterende reisedestinasjoner");
+        }
     }
 
     public void addJourney() {
-        journeyList.add(new Journey());
-        currentJourney = this.getJourney(this.getSize() - 1);// -1
+        Journey nyReise = new Journey(destinations);
+        unSortedJourneyList.add(nyReise);
+        currentJourney = nyReise;
+        this.sort(sorted);
     }
 
     public void removeJourney() {
         if (this.getSize() > 1) {
+            this.sort(sorted);
             int a = this.getIndex(currentJourney);
-            this.journeyList.remove(a);
+            this.unSortedJourneyList.remove(a);
+            this.sort(sorted);
             currentJourney = this.getJourney(a);
         } else {
             currentJourney.clear();
@@ -46,7 +70,9 @@ public class JourneyPlan {
     }
 
     public void pinPressed(String ID, Hashtable<String, Ellipse> knapper) {
-        if (currentJourney.isIn(ID)) {
+        if (!knapper.equals(destinations)) {
+            throw new IllegalArgumentException("basis av knapper er ikke likt basis av destionasjoner");
+        } else if (currentJourney.isIn(ID)) {
             currentJourney.removeCity(ID);
             currentJourney.toEllipse(ID, knapper).setFill(Color.RED);
         } else {
@@ -83,7 +109,7 @@ public class JourneyPlan {
     }
 
     public void save() {
-        filHåndterer.setTextToFile(journeyList);
+        filHåndterer.setTextToFile(unSortedJourneyList);
     }
 
     public Journey getCurrentJourney() {
@@ -93,12 +119,29 @@ public class JourneyPlan {
     public void next() {
         if (this.getSize() > this.getIndex(currentJourney) + 1) {// -1
             currentJourney = this.getJourney(this.getIndex(currentJourney) + 1);// -1
+        } else {
+            throw new IllegalArgumentException("du er på siste reise");
         }
     }
 
     public void last() {
         if (this.getIndex(currentJourney) >= 1) {
             currentJourney = this.getJourney(this.getIndex(currentJourney) - 1);
+        } else {
+            throw new IllegalArgumentException("du er på første reise");
         }
+    }
+
+    public void sort(boolean sorted) {
+        sortedJourneyList = unSortedJourneyList.stream().sorted(sorter).collect(Collectors.toList());
+        if (sorted) {
+            journeyList = sortedJourneyList;
+        } else {
+            journeyList = unSortedJourneyList;
+        }
+    }
+
+    public List<Journey> getSortedJourneyList() {
+        return (this.sortedJourneyList);
     }
 }

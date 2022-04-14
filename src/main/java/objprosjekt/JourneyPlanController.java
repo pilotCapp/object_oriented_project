@@ -3,24 +3,15 @@ package objprosjekt;
 import javafx.fxml.FXML;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Shape;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import javafx.scene.control.ToggleButton;
 import java.util.Hashtable;
-import java.util.List;
 
 public class JourneyPlanController {
 
@@ -33,23 +24,26 @@ public class JourneyPlanController {
     @FXML
     private Canvas panel;
     @FXML
-    private Button btnLast, btnNext, btnAdd, btnDelete;
+    private Button btnBack, btnNext, btnAdd, btnDelete, btnSave, btnLoad;
     @FXML
     private Label txtCurrentJourney;
+    @FXML
+    private ToggleButton autoToggle, btnSorted;
 
     private JourneyPlan travelPlan;
-    private static Hashtable<String, Ellipse> knapper;
+    private Hashtable<String, Ellipse> knapper;
 
     @FXML
     public void initialize() {
         openHash();
-        travelPlan = new JourneyPlan();
+        travelPlan = new JourneyPlan(knapper);
+        travelPlan.setSorted(btnSorted.isSelected());
         write();
         pinCheck();
         draw();
     }
 
-    private void openHash() {
+    public void openHash() {
         knapper = new Hashtable<>();
         knapper.put("NewYork", NewYork);
         knapper.put("Oslo", Oslo);
@@ -84,12 +78,14 @@ public class JourneyPlanController {
 
     @FXML
     private void newJourney() {
+        travelPlan.setSorted(btnSorted.isSelected());
         travelPlan.addJourney();
         refresh();
     }
 
     @FXML
     private void deleteJourney() {
+        travelPlan.setSorted(btnSorted.isSelected());
         travelPlan.removeJourney();
         refresh();
     }
@@ -104,7 +100,9 @@ public class JourneyPlanController {
         write();
         pinCheck();
         draw();
-        travelPlan.save();
+        if (autoToggle.isSelected()) {
+            travelPlan.save();
+        }
     }
 
     private void pinCheck() {
@@ -117,44 +115,79 @@ public class JourneyPlanController {
                 k.setFill(Color.RED);
             }
         }
+        if (travelPlan.getIndex(travelPlan.getCurrentJourney()) == 0) {
+            btnBack.setVisible(false);
+        } else {
+            btnBack.setVisible(true);
+        }
+
+        if (travelPlan.getIndex(travelPlan.getCurrentJourney()) == travelPlan.getSize() - 1) {
+            btnNext.setVisible(false);
+        } else {
+            btnNext.setVisible(true);
+        }
     }
 
     private void write() {
-        Ellipse[] btnArray = { NewYork, Oslo, CapeTown, Mumbai, Paris, London, Madrid, LosAngeles, Toronto, Rio,
-                Reykjavik, Moscow, BuenosAires, Beijing, MexicoCity, Bogota, Sydney };
+        // oppretter String
         String tekst = "Reise: " + (travelPlan.getIndex(travelPlan.getCurrentJourney()) + 1) + "\nByer:\n";
+        // legger til alle byene etter rekkefølge
         for (int k = 0; k < travelPlan.getCurrentJourney().getSize(); k++) {
             tekst += (k + 1) + ": " + travelPlan.getCurrentJourney().getCity(k) + "\n";
         }
+        // sjekker at reisen har en distanse
         if (travelPlan.getCurrentJourney().getSize() > 1) {
             tekst += "Total Reiseavstand " + travelPlan.getCurrentJourney().distance(knapper) + "Km";
         } else {
             tekst += "Total Reiseavstand " + 0 + "Km";
         }
+        // setter label med String
         txtCurrentJourney.setText(tekst);
     }
 
     private void draw() {
+        // lager GraphicContext
         GraphicsContext mal = panel.getGraphicsContext2D();
+        // clearer et rektangel like stort som hele canvas
         mal.clearRect(0, 0, panel.getWidth(), panel.getHeight());
+        // starter path
         mal.beginPath();
+        // seter linje
         mal.setLineWidth(3);
         mal.setStroke(Color.RED);
+        // skriver linge for alle byer i den viste reisen
         for (int k = 0; k < travelPlan.getCurrentJourney().getSize() - 1; k++) {
-            mal.moveTo(toEllipse(travelPlan.getCurrentJourney().getCity(k)).getParent().getLayoutX() - 6,
-                    toEllipse(travelPlan.getCurrentJourney().getCity(k)).getParent().getLayoutY() + 25);
-            mal.lineTo(toEllipse(travelPlan.getCurrentJourney().getCity(k + 1)).getParent().getLayoutX() - 6,
-                    toEllipse(travelPlan.getCurrentJourney().getCity(k + 1)).getParent().getLayoutY() + 25);
+            mal.moveTo(toEllipse(travelPlan.getCurrentJourney().getCity(k)).getLayoutX() - 6,
+                    toEllipse(travelPlan.getCurrentJourney().getCity(k)).getLayoutY() + 25);
+            mal.lineTo(toEllipse(travelPlan.getCurrentJourney().getCity(k + 1)).getLayoutX() - 6,
+                    toEllipse(travelPlan.getCurrentJourney().getCity(k + 1)).getLayoutY() + 25);
 
         }
         mal.stroke();
     }
 
+    // tar inn string og returnerer tilsvarende ellipse
     private Ellipse toEllipse(String navn) {
         if (knapper.get(navn) != null) {
             return (knapper.get(navn));
         } else {
-            throw new IllegalArgumentException("den knappen finnes ikke (controller)");
+            throw new IllegalArgumentException("den knappen finnes ikke (controller toEllipse)");
         }
+    }
+
+    @FXML
+    private void save() {
+        travelPlan.save();
+    }
+
+    @FXML
+    private void load() {
+        initialize();
+    }
+
+    @FXML
+    private void btnSorterPressed() {
+        travelPlan.sort(btnSorted.isSelected());
+        refresh();
     }
 }

@@ -1,19 +1,31 @@
 package objprosjekt;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Scanner;
+
+import javafx.scene.shape.Ellipse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 public class JourneyFileHandler implements JourneyFileHandlerInterface {
+    Hashtable<String, Ellipse> allDestinations;
+
+    public JourneyFileHandler(Hashtable<String, Ellipse> allDestinations) {
+        this.allDestinations = allDestinations;
+    }
 
     public void setTextToFile(List<Journey> alleReiser) {
         try (PrintWriter skriver = new PrintWriter("txtJourneyPlan.txt")) {
             for (Journey k : alleReiser) {
                 for (int l = 0; l < k.getSize(); l++) {
-                    skriver.print(k.getCity(l) + ",");
+                    if (allDestinations.get(k.getCity(l)) != null) {
+                        skriver.print(k.getCity(l) + ",");
+                    } else {
+                        throw new NullPointerException(k.getCity(l) + " er ikke en godkjent destinasjon");
+                    }
                 }
                 skriver.println();
             }
@@ -31,10 +43,14 @@ public class JourneyFileHandler implements JourneyFileHandlerInterface {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] reise = line.split(",");
-                Journey planlagtReise = new Journey();
+                Journey planlagtReise = new Journey(allDestinations);
                 for (String k : reise) {
-                    if (k != null && k != "," && k != "") {
-                        planlagtReise.addCity(k);
+                    if (k != "," && k != "") {
+                        if (allDestinations.get(k) == null) {
+                            throw new NullPointerException(k + "er ikke en godkjent destinasjon");
+                        } else {
+                            planlagtReise.addCity(k);
+                        }
                     }
                 }
                 alleReiser.addJourney(planlagtReise);
@@ -46,6 +62,15 @@ public class JourneyFileHandler implements JourneyFileHandlerInterface {
 
         if (alleReiser.getSize() == 0) {
             alleReiser.addJourney();
+        }
+    }
+
+    public void eraseFile() {
+        try (PrintWriter skriver = new PrintWriter("txtJourneyPlan.txt")) {
+            skriver.flush();
+            skriver.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
