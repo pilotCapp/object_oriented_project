@@ -14,8 +14,9 @@ public class JourneyComparator implements Comparator<Journey> {
 
     @Override
     public int compare(Journey o1, Journey o2) {
-        if(o1.getAllDestinations()!=this.allDestinations||o2.getAllDestinations()!=this.allDestinations){throw new NullPointerException("kan ikke sammenligne når en av reisene har en annen basis av destinasjoner");}
-        else if (o1.getSize() > o2.getSize()) {
+        if(o1.getAllDestinations()!=this.allDestinations||o2.getAllDestinations()!=this.allDestinations){
+            throw new NullPointerException("kan ikke sammenligne når en av reisene har en annen basis av destinasjoner");
+        } else if (o1.getSize() > o2.getSize()) {
             return (-1);
         } else if (o1.getSize() == o2.getSize()) {
             if (o1.distance(allDestinations) > o2.distance(allDestinations)) {
