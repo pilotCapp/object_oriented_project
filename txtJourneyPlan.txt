@@ -1,0 +1,5 @@
+MexicoCity,Madrid,
+CapeTown,Rio,
+BuenosAires,Bogota,Rio,
+BuenosAires,CapeTown,Mumbai,Paris,
+BuenosAires,Rio,Beijing,LosAngeles,

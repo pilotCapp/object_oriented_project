@@ -13,7 +13,7 @@ public class JourneyPlan {
     private List<Journey> journeyList;
     private List<Journey> sortedJourneyList;
 
-    private JourneyFileHandler filHåndterer;
+    private JourneyFileHandler fileManager;
     private Journey currentJourney;
     private Hashtable<String, Ellipse> destinations;
     private JourneyComparator sorter;
@@ -22,10 +22,10 @@ public class JourneyPlan {
     public JourneyPlan(Hashtable<String, Ellipse> allDestinations) {
         destinations = allDestinations;
         sorted = false;
-        filHåndterer = new JourneyFileHandler(allDestinations);
+        fileManager = new JourneyFileHandler(allDestinations);
         sorter = new JourneyComparator(destinations);
         journeyList = unSortedJourneyList;
-        filHåndterer.getTextFromFile(this);
+        fileManager.getTextFromFile(this);
         if (this.getSize() == 0) {
             addJourney();
         }
@@ -41,9 +41,9 @@ public class JourneyPlan {
     }
 
     public void addJourney(Journey reise) {
-        if (reise.getAllDestinations().equals(this.destinations)) {
-            unSortedJourneyList.add(reise);
-            this.sort(sorted);
+        if (reise.getAllDestinations().equals(this.destinations)) { //hvis destinasjoner i en journey/reise er lik destinasjoner i reiseplanen
+            unSortedJourneyList.add(reise); //legge til reisen i planen
+            this.sort(sorted); //dersom den skal sortere
             currentJourney = this.getJourney(this.getSize() - 1);// -1
         } else {
             throw new IllegalArgumentException("reisen har ikke-eksisterende reisedestinasjoner");
@@ -69,15 +69,15 @@ public class JourneyPlan {
         }
     }
 
-    public void pinPressed(String ID, Hashtable<String, Ellipse> knapper) {
+    public void pinPressed(String ID, Hashtable<String, Ellipse> knapper) { //hva som skjer hvis ellipsene er trykket
         if (!knapper.equals(destinations)) {
             throw new IllegalArgumentException("basis av knapper er ikke likt basis av destionasjoner");
         } else if (currentJourney.isIn(ID)) {
             currentJourney.removeCity(ID);
-            currentJourney.toEllipse(ID, knapper).setFill(Color.RED);
+            // currentJourney.toEllipse(ID, knapper).setFill(Color.RED);
         } else {
             currentJourney.addCity(ID);
-            currentJourney.toEllipse(ID, knapper).setFill(Color.GREEN);
+            // currentJourney.toEllipse(ID, knapper).setFill(Color.GREEN);
         }
     }
 
@@ -109,14 +109,14 @@ public class JourneyPlan {
     }
 
     public void save() {
-        filHåndterer.setTextToFile(unSortedJourneyList);
+        fileManager.setTextToFile(unSortedJourneyList);
     }
 
     public Journey getCurrentJourney() {
         return (this.currentJourney);
     }
 
-    public void next() {
+    public void next() { //gå til neste ved 'next' knapp, så lenge man ikke er i siste reise
         if (this.getSize() > this.getIndex(currentJourney) + 1) {// -1
             currentJourney = this.getJourney(this.getIndex(currentJourney) + 1);// -1
         } else {
@@ -124,7 +124,7 @@ public class JourneyPlan {
         }
     }
 
-    public void last() {
+    public void last() { //gå tilbake ved 'back' knapp, så lenge man ikke er i første reise
         if (this.getIndex(currentJourney) >= 1) {
             currentJourney = this.getJourney(this.getIndex(currentJourney) - 1);
         } else {
