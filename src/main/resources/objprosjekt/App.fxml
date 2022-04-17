@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Ellipse?>
 <?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anker" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="828.0" prefWidth="1114.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="objprosjekt.JourneyPlanController">
@@ -27,10 +26,10 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Button fx:id="btnBack" layoutX="373.0" layoutY="727.0" mnemonicParsing="false" onMouseClicked="#lastJourney" prefHeight="40.0" prefWidth="82.0" text="BACK" />
-      <Button fx:id="btnNext" layoutX="464.0" layoutY="728.0" mnemonicParsing="false" onMouseClicked="#nextJourney" prefHeight="40.0" prefWidth="82.0" text="NEXT" />
-      <Button fx:id="btnNew" layoutX="662.0" layoutY="728.0" mnemonicParsing="false" onMouseClicked="#newJourney" prefHeight="40.0" prefWidth="82.0" text="NEW" />
-      <Button fx:id="btnDelete" layoutX="753.0" layoutY="728.0" mnemonicParsing="false" onMouseClicked="#deleteJourney" prefHeight="40.0" prefWidth="82.0" text="DELETE" />
+      <Button fx:id="btnBack" focusTraversable="false" layoutX="373.0" layoutY="727.0" mnemonicParsing="false" onMouseClicked="#lastJourney" prefHeight="40.0" prefWidth="82.0" text="BACK" />
+      <Button fx:id="btnNext" focusTraversable="false" layoutX="464.0" layoutY="728.0" mnemonicParsing="false" onMouseClicked="#nextJourney" prefHeight="40.0" prefWidth="82.0" text="NEXT" />
+      <Button fx:id="btnNew" focusTraversable="false" layoutX="662.0" layoutY="728.0" mnemonicParsing="false" onMouseClicked="#newJourney" prefHeight="40.0" prefWidth="82.0" text="NEW" />
+      <Button fx:id="btnDelete" focusTraversable="false" layoutX="753.0" layoutY="728.0" mnemonicParsing="false" onMouseClicked="#deleteJourney" prefHeight="40.0" prefWidth="82.0" text="DELETE" />
       <Line endX="-94.83787536621094" endY="12.71051025390625" layoutX="392.0" layoutY="406.0" startX="-88.47846984863281" startY="-12.756988525390625" />
       <Ellipse fx:id="NewYork" fill="RED" layoutX="303.54498291015625" layoutY="394.0" onMouseClicked="#pinEvent" radiusX="7.0" radiusY="7.0" stroke="BLACK" strokeType="INSIDE">
          <cursor>
@@ -144,10 +143,9 @@
             <Insets />
          </opaqueInsets>
       </ToggleButton>
-      <Button fx:id="btnSave" layoutX="128.0" layoutY="14.0" mnemonicParsing="false" onAction="#save" prefHeight="32.0" prefWidth="70.0" text="SAVE" />
-      <Button fx:id="btnLoad" layoutX="217.0" layoutY="14.0" mnemonicParsing="false" onAction="#load" prefHeight="32.0" prefWidth="70.0" text="LOAD" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="320.0" layoutX="905.0" layoutY="-320.0" stroke="BLACK" strokeType="INSIDE" width="207.0" />
-      <ToggleButton fx:id="btnSorted" focusTraversable="false" layoutX="20.0" layoutY="51.0" mnemonicParsing="false" onAction="#btnSorterPressed" pickOnBounds="false" prefHeight="30.0" prefWidth="100.0" text="SORTED" textFill="WHITE">
+      <Button fx:id="btnSave" focusTraversable="false" layoutX="128.0" layoutY="14.0" mnemonicParsing="false" onAction="#save" prefHeight="32.0" prefWidth="70.0" text="SAVE" />
+      <Button fx:id="btnLoad" focusTraversable="false" layoutX="204.0" layoutY="14.0" mnemonicParsing="false" onAction="#load" prefHeight="32.0" prefWidth="70.0" text="LOAD" />
+      <ToggleButton fx:id="btnSorted" focusTraversable="false" layoutX="20.0" layoutY="51.0" mnemonicParsing="false" onAction="#btnSorterPressed" pickOnBounds="false" prefHeight="30.0" prefWidth="177.0" text="SORTED BY SIZE" textFill="WHITE">
          <font>
             <Font name="Apple Color Emoji" size="14.0" />
          </font>
@@ -158,5 +156,10 @@
             <Insets />
          </opaqueInsets>
       </ToggleButton>
+      <Label fx:id="txtIndex" layoutX="1009.0" layoutY="7.0" prefHeight="100.0" prefWidth="100.0" text="1" textAlignment="CENTER" textFill="#b98a00">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="70.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

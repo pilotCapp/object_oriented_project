@@ -9,14 +9,16 @@ public class Journey {
     private List<String> cities = new ArrayList<>();
     private Hashtable<String, Ellipse> destinations;
 
+    //oppretter basis for mulige destinasjoner i reisen ved oppstart
     public Journey(Hashtable<String, Ellipse> possibleDestinations) {
         destinations = possibleDestinations;
     }
 
+    //legger til ny destinasjon i reisen dersom 
     public void addCity(String by) {
-        if (cities.contains(by)) {
+        if (cities.contains(by)) {//byen ikke likker i reisen fra før av
             throw new IllegalArgumentException("kan ikke reise til samme by to ganger");
-        } else if (destinations.get(by) == null) {
+        } else if (destinations.get(by) == null) {//destinasjonen eksisterer i hendhold til satt basis^^
             throw new NullPointerException("Det reisemålet eksisterer ikke");
         } else {
             cities.add(by);
@@ -25,11 +27,11 @@ public class Journey {
     }
 
     public void removeCity(String by) {
-        if (!cities.remove(by)) {
+        if (!cities.remove(by)) {//prøver å gjerne destinasjon dersom den er i reisen
             throw new NullPointerException();
         }
     }
-
+    //returnerer indeks til reisen dersom den er i reisen
     public int getIndex(String by) {
         if (cities.indexOf(by) == -1) {
             throw new IllegalArgumentException("Kan ikke finne index til en by som ikke er i reisen");
@@ -38,10 +40,12 @@ public class Journey {
         }
     }
 
+    //returnerer mengden med destinasjoner i reiser
     public int getSize() {
         return (cities.size());
     }
 
+    //returnerer destinasjonen på valgt indeks dersom det eksisterer en destinasjon med valgt index 
     public String getCity(int a) {
         try {
             return (cities.get(a));
@@ -50,6 +54,7 @@ public class Journey {
         }
     }
 
+    //returnerer true dersom destinasjonen er i reisen
     public boolean isIn(String by) {
         if (cities.contains(by)) {
             return (true);
@@ -58,32 +63,36 @@ public class Journey {
         }
     }
 
+    //fjerner alle desitnasjoner i reisen
     public void clear() {
         cities.clear();
     }
 
-    public long distance(Hashtable<String, Ellipse> knapper) {
+    //regner avstanden på reisen ved å addere avstanden mellom alle destinasjonene i reisen
+    public long distance() {
         Double distance = 0.0;
         for (int k = 0; k < cities.size() - 1; k++) {
             distance += Math.sqrt(Math.pow(
-                    toEllipse(cities.get(k), knapper).getLayoutX()
-                            - toEllipse(cities.get(k + 1), knapper).getLayoutX(),
+                    toEllipse(cities.get(k)).getLayoutX()
+                            - toEllipse(cities.get(k + 1)).getLayoutX(),
                     2)
-                    + Math.pow(toEllipse(cities.get(k), knapper).getLayoutY()
-                            - toEllipse(cities.get(k + 1), knapper).getLayoutY(), 2));
+                    + Math.pow(toEllipse(cities.get(k)).getLayoutY()
+                            - toEllipse(cities.get(k + 1)).getLayoutY(), 2));
         }
         return (Math.round(distance * 22.55));
     }
 
-    public Ellipse toEllipse(String by, Hashtable<String, Ellipse> destinasjoner) {
-        if (destinasjoner.get(by) != null) {
-            return (destinasjoner.get(by));
+    //tar in en destinasjon som string og returnerer Ellipsen til destinasjonen
+    public Ellipse toEllipse(String by) {
+        if (destinations.get(by) != null) {
+            return (destinations.get(by));
         } else {
             throw new IllegalArgumentException("den destinasjoner eksister ikke");
         }
     }
-    public Hashtable<String,Ellipse> getAllDestinations(){
-        return(this.destinations);
-    }
 
+    //returnerer basis for alle destinasjonene til reisen som ble satt ved oppstart av reisen^^
+    public Hashtable<String, Ellipse> getAllDestinations() {
+        return (this.destinations);
+    }
 }

@@ -110,32 +110,32 @@ public class JourneyTest {
     @Test
     void validateToEllipseMethod() {
         // tester at metoden returnerer riktig ellipse objekt
-        Assertions.assertEquals(reisemål1, reise.toEllipse("reisemål1", destinasjoner));
-        Assertions.assertEquals(reisemål2, reise.toEllipse("reisemål2", destinasjoner));
-        Assertions.assertEquals(reisemål3, reise.toEllipse("reisemål3", destinasjoner));
+        Assertions.assertEquals(reisemål1, reise.toEllipse("reisemål1"));
+        Assertions.assertEquals(reisemål2, reise.toEllipse("reisemål2"));
+        Assertions.assertEquals(reisemål3, reise.toEllipse("reisemål3"));
         // tester at metoden håndterer reisemål som ikke er en destinasjon
-        Assertions.assertThrows(IllegalArgumentException.class, () -> reise.toEllipse("reisemål4", destinasjoner));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> reise.toEllipse("reisemål4"));
     }
 
     @Test
     void validateDistanceCalculator() {
         // tester at en tom reise har avstand på 0
-        Assertions.assertEquals(0, reise.distance(destinasjoner));
+        Assertions.assertEquals(0, reise.distance());
         // tester at en reise med kun en by har avstand på 0
         reise.addCity("reisemål1");
-        Assertions.assertEquals(0, reise.distance(destinasjoner));
+        Assertions.assertEquals(0, reise.distance());
         // tester reiser med 2 og 3 byer
         reise.addCity("reisemål2");
-        Assertions.assertEquals(6059, reise.distance(destinasjoner));
+        Assertions.assertEquals(6059, reise.distance());
         reise.addCity("reisemål3");
-        Assertions.assertEquals(11481, reise.distance(destinasjoner));
+        Assertions.assertEquals(11481, reise.distance());
         reise.clear();
         reise.addCity("reisemål3");
         // tester at reisen i motsat retning har samme avstand (med 1 km avrundingsfeil)
-        Assertions.assertEquals(0, reise.distance(destinasjoner));
+        Assertions.assertEquals(0, reise.distance());
         reise.addCity("reisemål2");
-        Assertions.assertEquals(11481 - 6059, reise.distance(destinasjoner), 1);
+        Assertions.assertEquals(11481 - 6059, reise.distance(), 1);
         reise.addCity("reisemål1");
-        Assertions.assertEquals(11481, reise.distance(destinasjoner), 1);
+        Assertions.assertEquals(11481, reise.distance(), 1);
     }
 }

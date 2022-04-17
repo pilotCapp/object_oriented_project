@@ -19,9 +19,9 @@ public class JourneyComparator implements Comparator<Journey> {
         } else if (o1.getSize() > o2.getSize()) {
             return (-1);
         } else if (o1.getSize() == o2.getSize()) {
-            if (o1.distance(allDestinations) > o2.distance(allDestinations)) {
+            if (o1.distance() > o2.distance()) {
                 return (-1);
-            } else if (o1.distance(allDestinations) < o2.distance(allDestinations)) {
+            } else if (o1.distance() < o2.distance()) {
                 return (1);
             } else {
                 return (0);

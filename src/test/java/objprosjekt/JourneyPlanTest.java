@@ -175,9 +175,9 @@ public class JourneyPlanTest {
         Assertions.assertEquals(reise3, reiseplan.getCurrentJourney());
 
         // distansen til alle reisene til referanse
-        Assertions.assertEquals(11481, reise1.distance(destinasjoner));
-        Assertions.assertEquals(6059, reise2.distance(destinasjoner));
-        Assertions.assertEquals(6697, reise3.distance(destinasjoner));
+        Assertions.assertEquals(11481, reise1.distance());
+        Assertions.assertEquals(6059, reise2.distance());
+        Assertions.assertEquals(6697, reise3.distance());
 
         // tester at indexen til reisene er endret i riktig rekkefølge
         Assertions.assertEquals(1, reiseplan.getIndex(reise3));

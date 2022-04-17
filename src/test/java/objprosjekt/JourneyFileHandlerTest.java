@@ -116,8 +116,8 @@ public class JourneyFileHandlerTest {
         List<Journey> reiseliste = new ArrayList<>();
         reiseliste.add(reise4);
         Assertions.assertThrows(NullPointerException.class, () -> filhåndterer.setTextToFile(reiseliste));
-        Assertions.assertNotEquals(reise4.distance(ekstraDestinasjoner),
-                reiseplan.getJourney(1).distance(destinasjoner));
+        Assertions.assertNotEquals(reise4.distance(),
+                reiseplan.getJourney(1).distance());
 
     }
 
@@ -140,8 +140,8 @@ public class JourneyFileHandlerTest {
         Assertions.assertThrows(NullPointerException.class, () -> filhåndterer.getTextFromFile(reiseplan));
         // sjekker så at denne ukjente reise destinajsonen ikke har blitt lest fra fil
         // til den originale reiseplanen
-        Assertions.assertNotEquals(ekstraReisePlan.getJourney(1).distance(ekstraDestinasjoner),
-                reiseplan.getJourney(1).distance(destinasjoner));
+        Assertions.assertNotEquals(ekstraReisePlan.getJourney(1).distance(),
+                reiseplan.getJourney(1).distance());
     }
 
     private void illegalJourneySetup() {

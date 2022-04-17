@@ -25,7 +25,7 @@ public class JourneyPlanController {
     @FXML
     private Button btnBack, btnNext, btnAdd, btnDelete, btnSave, btnLoad;
     @FXML
-    private Label txtCurrentJourney;
+    private Label txtCurrentJourney, txtIndex;
     @FXML
     private ToggleButton autoToggle, btnSorted;
 
@@ -33,12 +33,13 @@ public class JourneyPlanController {
     private Hashtable<String, Ellipse> knapper;
 
     @FXML
-    public void initialize() { //hva som skjer når man åpner applikasjnen
-        openHash(); //åpner hashtable
-        travelPlan = new JourneyPlan(knapper); //oppretter travelPlan med en ny JourneyPlan og tar inn valgte destinasjoner
-        travelPlan.setSorted(btnSorted.isSelected()); //legger inn i reiseplan om sortering er av eller på
+    public void initialize() { // hva som skjer når man åpner applikasjnen
+        openHash(); // åpner hashtable
+        travelPlan = new JourneyPlan(knapper); // oppretter travelPlan med en ny JourneyPlan og tar inn valgte
+                                               // destinasjoner
+        travelPlan.setSorted(btnSorted.isSelected()); // legger inn i reiseplan om sortering er av eller på
         write();
-        pinCheck();
+        buttonCheck();
         draw();
     }
 
@@ -64,66 +65,73 @@ public class JourneyPlanController {
     }
 
     @FXML
-    private void nextJourney() { //blar til neste reise
-        travelPlan.next(); 
-        refresh(); //oppdater brukergrensesnitt
+    private void nextJourney() { // blar til neste reise
+        travelPlan.next();
+        refresh(); // oppdater brukergrensesnitt
     }
 
     @FXML
-    private void lastJourney() { //blar tilbake til forrige
+    private void lastJourney() { // blar tilbake til forrige
         travelPlan.last();
-        refresh(); //oppdater brukergrensesnitt
+        refresh(); // oppdater brukergrensesnitt
     }
 
     @FXML
     private void newJourney() {
-        travelPlan.setSorted(btnSorted.isSelected()); //setter sorteringsveri, true/false
-        travelPlan.addJourney(); //lager ny reise
-        refresh();  //oppdater brukergrensesnitt
+        travelPlan.setSorted(btnSorted.isSelected()); // setter sorteringsveri, true/false
+        travelPlan.addJourney(); // lager ny reise
+        refresh(); // oppdater brukergrensesnitt
     }
 
     @FXML
     private void deleteJourney() {
         travelPlan.setSorted(btnSorted.isSelected());
         travelPlan.removeJourney();
-        refresh();  //oppdater brukergrensesnitt
+        refresh(); // oppdater brukergrensesnitt
     }
 
     @FXML
-    private void pinEvent(MouseEvent e) { //ved trykk på knapp
-        travelPlan.pinPressed(((Ellipse) e.getSource()).getId(), knapper); //kjører pinPressed i journey plan, henter objektet og legger inn id til knapp og knappehashtable
-        refresh(); //oppdater brukergrensesnitt
+    private void pinEvent(MouseEvent e) { // ved trykk på knapp
+        travelPlan.pinPressed(((Ellipse) e.getSource()).getId(), knapper); // kjører pinPressed i journey plan, henter
+                                                                           // objektet og legger inn id til knapp og
+                                                                           // knappehashtable
+        refresh(); // oppdater brukergrensesnitt
     }
 
-    private void refresh() { //oppdater brukergrensesnittet 
-        write(); 
-        pinCheck();
+    private void refresh() { // oppdater brukergrensesnittet
+        write();
+        buttonCheck();
         draw();
-        if (autoToggle.isSelected()) { //hvis automatisk lagring er aktivert
-            travelPlan.save(); //vil lagring skje automatisk
+        if (autoToggle.isSelected()) { // hvis automatisk lagring er aktivert
+            travelPlan.save(); // vil lagring skje automatisk
         }
     }
 
-    private void pinCheck() {
+    private void buttonCheck() {
         Ellipse[] btnArray = { NewYork, Oslo, CapeTown, Mumbai, Paris, London, Madrid, LosAngeles, Toronto, Rio,
                 Reykjavik, Moscow, BuenosAires, Beijing, MexicoCity, Bogota, Sydney };
         for (Ellipse k : btnArray) {
-            if (travelPlan.getCurrentJourney().isIn(k.getId())) { //itererer over knapper inkludert i currentJourney for å 
-                k.setFill(Color.GREEN); //markere de som er inkludert grønn
+            if (travelPlan.getCurrentJourney().isIn(k.getId())) { // itererer over knapper inkludert i currentJourney
+                                                                  // for å
+                k.setFill(Color.GREEN); // markere de som er inkludert grønn
             } else {
-                k.setFill(Color.RED); //resten er ubrukt, og røde
+                k.setFill(Color.RED); // resten er ubrukt, og røde
             }
         }
-        if (travelPlan.getIndex(travelPlan.getCurrentJourney()) == 0) { //sjekker om indeks på currentJourney er første element i reiseplan for å 
-            btnBack.setVisible(false); //fjerne 'back' på første journey
+        if (travelPlan.getIndex(travelPlan.getCurrentJourney()) == 0) { // sjekker om indeks på currentJourney er første
+                                                                        // element i reiseplan for å
+            btnBack.setVisible(false); // fjerne 'back' på første journey
         } else {
-            btnBack.setVisible(true); //vise ellers
+            btnBack.setVisible(true); // vise ellers
         }
 
-        if (travelPlan.getIndex(travelPlan.getCurrentJourney()) == travelPlan.getSize() - 1) { //sjekker om indeks på currentJourney er siste element i reiseplan for å 
-            btnNext.setVisible(false); //fjerne 'next' på siste journey
+        if (travelPlan.getIndex(travelPlan.getCurrentJourney()) == travelPlan.getSize() - 1) { // sjekker om indeks på
+                                                                                               // currentJourney er
+                                                                                               // siste element i
+                                                                                               // reiseplan for å
+            btnNext.setVisible(false); // fjerne 'next' på siste journey
         } else {
-            btnNext.setVisible(true); //vise ellers
+            btnNext.setVisible(true); // vise ellers
         }
     }
 
@@ -134,14 +142,16 @@ public class JourneyPlanController {
         for (int k = 0; k < travelPlan.getCurrentJourney().getSize(); k++) {
             tekst += (k + 1) + ": " + travelPlan.getCurrentJourney().getCity(k) + "\n";
         }
-        // sjekker at reisen har en distanse
-        if (travelPlan.getCurrentJourney().getSize() > 1) { //hvis to eller flere byer
-            tekst += "Total Reiseavstand " + travelPlan.getCurrentJourney().distance(knapper) + "Km";
-        } else {
+        // sjekker at reisen har en distanse (slipper å regne avstand hvis den uansett
+        // er 0)
+        if (travelPlan.getCurrentJourney().getSize() > 1) { // hvis to eller flere byer
+            tekst += "Total Reiseavstand " + travelPlan.getCurrentJourney().distance() + "Km";
+        } else {// hvis minde enn to byer
             tekst += "Total Reiseavstand " + 0 + "Km";
         }
         // setter label med String
         txtCurrentJourney.setText(tekst);
+        txtIndex.setText(Integer.toString(travelPlan.getIndex(travelPlan.getCurrentJourney()) + 1));
     }
 
     private void draw() {
@@ -156,9 +166,14 @@ public class JourneyPlanController {
         mal.setStroke(Color.RED);
         // skriver linge for alle byer i den viste reisen
         for (int k = 0; k < travelPlan.getCurrentJourney().getSize() - 1; k++) {
-            mal.moveTo(toEllipse(travelPlan.getCurrentJourney().getCity(k)).getLayoutX() - 6, //for å flytte penselen til første destinasjon, ikke (0,0)
+            mal.moveTo(toEllipse(travelPlan.getCurrentJourney().getCity(k)).getLayoutX() - 6, // for å flytte penselen
+                                                                                              // til første destinasjon,
+                                                                                              // ikke (0,0)
                     toEllipse(travelPlan.getCurrentJourney().getCity(k)).getLayoutY() + 25);
-            mal.lineTo(toEllipse(travelPlan.getCurrentJourney().getCity(k + 1)).getLayoutX() - 6, //tegne fra forrige til neste destinasjon
+
+            mal.lineTo(toEllipse(travelPlan.getCurrentJourney().getCity(k + 1)).getLayoutX() - 6, // tegne fra forrige
+                                                                                                  // til neste
+                                                                                                  // destinasjon
                     toEllipse(travelPlan.getCurrentJourney().getCity(k + 1)).getLayoutY() + 25);
 
         }
@@ -166,7 +181,10 @@ public class JourneyPlanController {
     }
 
     // tar inn string og returnerer tilsvarende ellipse
-    private Ellipse toEllipse(String navn) {
+    // kunne brukt intern Journey toEllipse-funksjon, men da hadde koden over blitt
+    // veldig
+    // rotete
+    private Ellipse toEllipse(String navn) throws NullPointerException {
         if (knapper.get(navn) != null) {
             return (knapper.get(navn));
         } else {
@@ -175,17 +193,17 @@ public class JourneyPlanController {
     }
 
     @FXML
-    private void save() { //binder 'save' knapp med save funksjon
+    private void save() { // binder 'save' knapp med save funksjon
         travelPlan.save();
     }
 
     @FXML
-    private void load() { //binder 'load' knapp med initialize funksjon
+    private void load() { // binder 'load' knapp med initialize funksjon
         initialize();
     }
 
     @FXML
-    private void btnSorterPressed() {
+    private void btnSorterPressed() {// sorterer reiseplanen utifra om den skal være sortert eller ikke
         travelPlan.sort(btnSorted.isSelected());
         refresh();
     }
