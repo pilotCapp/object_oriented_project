@@ -1,6 +1,7 @@
 package objprosjekt;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Hashtable;
@@ -111,7 +112,7 @@ public class JourneyPlanTest {
         // tester at knappen som trykkes på eksisterer i henholdt til destinasjoner
         illegalJourneySetup();
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> reiseplan.pinPressed("reise4", ekstraDestinasjoner));
+                () -> reiseplan.manageDestination("reise4", ekstraDestinasjoner));
     }
 
     @Test

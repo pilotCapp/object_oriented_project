@@ -92,7 +92,7 @@ public class JourneyPlanController {
 
     @FXML
     private void pinEvent(MouseEvent e) { // ved trykk på knapp
-        travelPlan.pinPressed(((Ellipse) e.getSource()).getId(), knapper); // kjører pinPressed i journey plan, henter
+        travelPlan.manageDestination(((Ellipse) e.getSource()).getId(), knapper); // kjører pinPressed i journey plan, henter
                                                                            // objektet og legger inn id til knapp og
                                                                            // knappehashtable
         refresh(); // oppdater brukergrensesnitt
@@ -146,7 +146,7 @@ public class JourneyPlanController {
         // er 0)
         if (travelPlan.getCurrentJourney().getSize() > 1) { // hvis to eller flere byer
             tekst += "Total Reiseavstand " + travelPlan.getCurrentJourney().distance() + "Km";
-        } else {// hvis minde enn to byer
+        } else {// hvis mindre enn to byer
             tekst += "Total Reiseavstand " + 0 + "Km";
         }
         // setter label med String

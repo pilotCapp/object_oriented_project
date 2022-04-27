@@ -66,7 +66,7 @@ public class JourneyPlan {
 
     // legge til en ny reise i reiseplanen
     public void addJourney() {
-        Journey nyReise = new Journey(destinations);
+        Journey nyReise = new Journey(this.destinations);
         unSortedJourneyList.add(nyReise);
         currentJourney = nyReise;
         this.sort(sorted);// sorterer utifra om man skal sortere eller ikke
@@ -87,7 +87,7 @@ public class JourneyPlan {
         }
     }
 
-    public void pinPressed(String ID, Hashtable<String, Ellipse> knapper) { // hva som skjer hvis ellipsene er trykket
+    public void manageDestination(String ID, Hashtable<String, Ellipse> knapper) { // hva som skjer hvis ellipsene er trykket
         if (!knapper.equals(destinations)) {
             throw new IllegalArgumentException("basis av knapper er ikke likt basis av destionasjoner");
         } else if (currentJourney.isIn(ID)) {
