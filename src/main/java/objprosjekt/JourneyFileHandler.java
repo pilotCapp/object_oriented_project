@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 
 public class JourneyFileHandler implements JourneyFileHandlerInterface {
     // lager basis for alle destinasjoner
-    Hashtable<String, Ellipse> destinations;
+    private Hashtable<String, Ellipse> destinations;
 
     // oppretter basis fra oppstart
     public JourneyFileHandler(Hashtable<String, Ellipse> allDestinations) {
