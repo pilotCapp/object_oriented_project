@@ -11,7 +11,7 @@ public class JourneyTest {
     private Ellipse reisemål1;
     private Ellipse reisemål2;
     private Ellipse reisemål3;
-    Hashtable<String, Ellipse> destinasjoner;
+    private Hashtable<String, Ellipse> destinasjoner;
 
     @BeforeEach
     public void setup() {

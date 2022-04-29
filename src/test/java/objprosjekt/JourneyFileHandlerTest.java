@@ -26,7 +26,7 @@ public class JourneyFileHandlerTest {
     private Hashtable<String, Ellipse> destinasjoner;
     private Hashtable<String, Ellipse> ekstraDestinasjoner;
 
-    JourneyFileHandler filhåndterer;
+    private JourneyFileHandler filhåndterer;
 
     @BeforeEach
     public void setup() {
