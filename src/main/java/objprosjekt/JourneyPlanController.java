@@ -99,6 +99,7 @@ public class JourneyPlanController {
     }
 
     private void refresh() { // oppdater brukergrensesnittet
+        travelPlan.sort(btnSorted.isSelected());
         write();
         buttonCheck();
         draw();
@@ -200,11 +201,11 @@ public class JourneyPlanController {
     @FXML
     private void load() { // binder 'load' knapp med initialize funksjon
         initialize();
+        refresh();
     }
 
     @FXML
     private void btnSorterPressed() {// sorterer reiseplanen utifra om den skal være sortert eller ikke
-        travelPlan.sort(btnSorted.isSelected());
         refresh();
     }
 }

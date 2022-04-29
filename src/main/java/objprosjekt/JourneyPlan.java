@@ -77,10 +77,11 @@ public class JourneyPlan {
     public void removeJourney() {
         if (this.getSize() > 1) {
             this.sort(sorted);
-            int a = this.getIndex(currentJourney);
+            int a = unSortedJourneyList.indexOf(currentJourney);
+            int b=this.getIndex(currentJourney);
             this.unSortedJourneyList.remove(a);
             this.sort(sorted);
-            currentJourney = this.getJourney(a);
+            currentJourney = this.getJourney(b);
         } else {// fjerner alle destinasjoner i den nåværende reisen dersom det er den eneste
                 // reisen i planen
             currentJourney.clear();
